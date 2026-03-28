@@ -49,7 +49,7 @@ class app:
         self.name =name
 
     def login(self):
-        print("log in succesfull")
+        print("log in succesfull using password and name")
     
     def dashboard(self):
         print(f"this si {self.name}")
