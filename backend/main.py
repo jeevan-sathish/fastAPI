@@ -21,7 +21,7 @@ def greet():
 @app.get('/demo')
 def demo():
     return {
-        "me"
+        "message":"test 1 passes"
     }
 
 app.include_router(calculate.router,prefix="/api")
