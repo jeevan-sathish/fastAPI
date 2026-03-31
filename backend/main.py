@@ -1,13 +1,18 @@
-from fastapi import FastAPI ,WebSocket
+from fastapi import FastAPI, WebSocket
 
-app =FastAPI()
-@app.websockwet("/ws")
-async def websocklet_endpoint(websocket:WebSocket):
+app = FastAPI()
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
+    print("✅ Client connected")
 
-    while True:
-        data = await websocket.receive_text()
-        print("Recieved",data)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            print("📩 Received:", data)
 
-        await websocket.send_text(f"Message for server:{data}")
+            await websocket.send_text(f"Message from server: {data}")
 
+    except Exception as e:
+        print("❌ Client disconnected:", e)
