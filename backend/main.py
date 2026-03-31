@@ -8,3 +8,6 @@ async def websocklet_endpoint(websocket:WebSocket):
     while True:
         data = await websocket.receive_text()
         print("Recieved",data)
+
+        await websocket.send_text(f"Message for server:{data}")
+
