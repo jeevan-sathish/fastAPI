@@ -1,27 +1,10 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from routers import calculate
+from fastapi import FastAPI ,WebSocket
 
-app=FastAPI()
+app =FastAPI()
+@app.websockwet("/ws")
+async def websocklet_endpoint(websocket:WebSocket):
+    await websocket.accept()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
-
-@app.get('/')
-def greet():
-    return {
-        "message":"hello form FastAPi"
-    }
-
-@app.get('/demo')
-def demo():
-    return {
-        "message":"test 1 passes"
-    }
-
-app.include_router(calculate.router,prefix="/api")
+    while True:
+        data = await websocket.receive_text()
+        print("Recieved",data)
