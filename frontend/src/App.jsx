@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 const App = () => {
   const [message, setMessage] = useState("");
   const [socket, setSocket] = useState(null);
-  const [res, setres] = useState("");
+  const [res, setRes] = useState("");
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8000/ws");
@@ -13,7 +13,11 @@ const App = () => {
     };
 
     ws.onmessage = (event) => {
-      console.log("📩 Server says:", event.data);
+      if (event.data) {
+        setRes(event.data);
+      } else {
+        console.log("no data sent");
+      }
     };
 
     ws.onclose = () => {
