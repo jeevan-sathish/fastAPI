@@ -1,27 +1,24 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI,WebSocket
 import ollama
 
-app = FastAPI()
+app =FastAPI()
 
-@app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
+@app.websocket('/ws')
+async def websocket_endpoint(websocket:WebSocket):
     await websocket.accept()
-    print("✅ Connection successful")
+    print("connected ✅")
 
     try:
         while True:
-            data = await websocket.receive_text()
-            print("📩 From client:", data)
-
+            data =await websocket.receive_text()
+            print(data)
+            prompt=f"ENSURE THE INFORMATION DOENT EXCEED MARE THAN 2 LINES {data}"
             response = ollama.chat(
                 model="llama3",
-                messages=[{"role": "user", "content": data}]
+                messages=[{"role":"user","content":prompt}]
             )
+            ollama_response= response["message"]["content"]
 
-            ai_reply = response["message"]["content"]
-
-            # ✅ Send ONE string
-            await websocket.send_text(f"AI: {ai_reply}")
-
-    except WebSocketDisconnect:
-        print("❌ Client disconnected")
+            await websocket.send_text(ollama_response)
+    except Exception as e:
+        print("error:",e)
