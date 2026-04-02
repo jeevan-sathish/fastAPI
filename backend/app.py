@@ -42,28 +42,36 @@
 
 
 
-class app:
-    databse =["jeevan","chintu"]
+# class app:
+#     databse =["jeevan","chintu"]
 
-    def __init__(self,name):
-        self.name =name
+#     def __init__(self,name):
+#         self.name =name
 
-    def login(self):
-        print("log in succesfull using password and name")
+#     def login(self):
+#         print("log in succesfull using password and name")
     
-    def dashboard(self):
-        print(f"this si {self.name}")
+#     def dashboard(self):
+#         print(f"this si {self.name}")
 
-    def validate(self):
-        if self.name in self.databse:
-            self.login()
-            self.dashboard()
-        else:
-            print("log in failed")
+#     def validate(self):
+#         if self.name in self.databse:
+#             self.login()
+#             self.dashboard()
+#         else:
+#             print("log in failed")
         
 
-obj =app("chintu")
-obj.validate()
+# obj =app("chintu")
+# obj.validate()
 
 
+import ollama
+
+response = ollama.chat(
+    model="llama3",
+    messages=[{"role": "user", "content": "what is socket"}]
+)
+
+print(response["message"]["content"])
 
