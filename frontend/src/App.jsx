@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 const App = () => {
   const [query, setQuery] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("Connecting...");
   const [chat, setChat] = useState([]);
 
   const ws = useRef(null);
@@ -11,18 +11,27 @@ const App = () => {
   useEffect(() => {
     ws.current = new WebSocket("ws://localhost:8000/ws");
 
-    ws.current.onopen = () => setStatus("Connected");
-    ws.current.onclose = () => setStatus("Disconnected");
-    ws.current.onerror = () => setStatus("Error");
+    ws.current.onopen = () => setStatus("✅ Connected");
+    ws.current.onclose = () => setStatus("❌ Disconnected");
+    ws.current.onerror = () => setStatus("⚠️ Error");
 
     ws.current.onmessage = (event) => {
       setChat((prev) => {
         const updated = [...prev];
-        if (updated.length && updated[updated.length - 1].loading) {
-          updated.pop();
+        const last = updated[updated.length - 1];
+
+        if (last && last.loading) {
+          updated[updated.length - 1] = {
+            role: "bot",
+            text: event.data,
+          };
         }
-        updated.push({ role: "bot", text: event.data });
-        return updated;
+        // Append streaming chunks
+        else if (last && last.role === "bot") {
+          last.text += event.data;
+        }
+
+        return [...updated];
       });
     };
 
@@ -40,7 +49,7 @@ const App = () => {
       setChat((prev) => [
         ...prev,
         { role: "user", text: query },
-        { role: "bot", text: "Typing...", loading: true },
+        { role: "bot", text: "", loading: true },
       ]);
 
       ws.current.send(query);
@@ -53,12 +62,13 @@ const App = () => {
       style={{
         maxWidth: "600px",
         margin: "40px auto",
-        fontFamily: "Arial, sans-serif",
+        fontFamily: "Arial",
       }}
     >
       <h3 style={{ textAlign: "center", color: "#555" }}>{status}</h3>
-      <h1>Read-Time AI chat-BOT</h1>
+      <h1 style={{ textAlign: "center" }}>⚡ Real-Time AI Chat</h1>
 
+      {/* CHAT BOX */}
       <div
         style={{
           height: "400px",
@@ -88,18 +98,20 @@ const App = () => {
                 fontSize: "14px",
               }}
             >
-              {msg.text}
+              {msg.loading ? "Typing..." : msg.text}
             </div>
           </div>
         ))}
         <div ref={bottomRef} />
       </div>
 
+      {/* INPUT */}
       <div style={{ display: "flex", marginTop: "10px" }}>
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           placeholder="Type a message..."
           style={{
             flex: 1,

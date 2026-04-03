@@ -1,5 +1,6 @@
 from fastapi import FastAPI,WebSocket
 import ollama
+import asyncio
 
 app =FastAPI()
 
@@ -23,6 +24,7 @@ async def websocket_endpoint(websocket:WebSocket):
                 content = chunk["message"]["content"]
 
                 await websocket.send_text(content)
+                await asyncio.sleep(0.02)
             
 
 
