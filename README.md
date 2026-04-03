@@ -1,25 +1,36 @@
-Real-Time Chat App
+# 🎥 Demo
+
+<p align="center">
+  <img src="./frontend/src/assets/projectDemo.gif" width="700"/>
+</p>
+
+---
+
+# Real-Time Chat App
 
 A simple real-time chat application built using WebSockets. It allows users to send messages and receive instant responses with a clean chat interface and typing indicator.
 
-Features
-⚡ Real-time messaging using WebSockets
-💬 Chat-style UI (user & bot messages)
-⏳ Typing indicator while waiting for response
-🔽 Auto-scroll to latest message
+## 🚀 Features
+
+⚡ Real-time messaging using WebSockets  
+💬 Chat-style UI (user & bot messages)  
+⏳ Typing indicator while waiting for response  
+🔽 Auto-scroll to latest message  
 🎯 Minimal and responsive design
 
-![Screenshot](./frontend/src/assets/img1.png)
+## 📸 Screenshots
+
+![Screenshot](./frontend/src/assets/img1.png)  
 ![Screenshot](./frontend/src/assets/img2.png)
 
-Tech Stack
+## 🛠️ Tech Stack
 
-Frontend
+### Frontend
 
-React (Hooks)
-JavaScript (ES6)
+- React (Hooks)
+- JavaScript (ES6)
 
-Backend
+### Backend
 
-FastAPI
-WebSockets
+- FastAPI
+- WebSockets
